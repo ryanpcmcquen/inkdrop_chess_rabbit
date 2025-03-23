@@ -94,14 +94,13 @@ module.exports = {
             codeMirrorInstance.replaceSelection(
                 [
                     lichessPastedGame.url,
-                    "```pgn",
-                    pgnContents,
-                    "```",
-                    // The iframe loads successfully, but all of the
-                    // interactions with it are broken, will
-                    // need to do more research.
-                    // `<iframe src="https://lichess.org/embed/game/${gameId}?theme=auto&bg=auto" width=600 height=397 frameborder=0></iframe>`,
-                    `![${gameId} gif](https://lichess1.org/game/export/gif/${gameId}.gif)`,
+                    // "```pgn",
+                    // pgnContents,
+                    // "```",
+                    // The iframe loads successfully, but
+                    // some interactions are broken.
+                    `<iframe src="https://lichess.org/embed/game/${gameId}?theme=auto&bg=auto" width=600 height=397 frameborder=0></iframe>`,
+                    // `![${gameId} gif](https://lichess1.org/game/export/gif/${gameId}.gif)`,
                 ].join("\n\n")
             );
         }
