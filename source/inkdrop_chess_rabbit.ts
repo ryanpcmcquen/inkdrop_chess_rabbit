@@ -1,6 +1,30 @@
+"use babel";
+
+const CodeMirror = require("codemirror");
+
+export interface Editor {
+    cm: CodeMirror.Editor;
+    forceUpdate(): any;
+    wrapper: any;
+}
+
+export interface Inkdrop {
+    window: any;
+    commands: any;
+    config: any;
+    components: any;
+    layouts: any;
+    store: any;
+    getActiveEditor(): Editor;
+    onEditorLoad(callback: (e: Editor) => void): void;
+    isEditorActive(): Boolean;
+}
+
+declare const inkdrop: Inkdrop;
+
 module.exports = {
     activate() {
-        console.log("Chess Rabbit ready to run ...");
+        console.log("The Chess Rabbit is ready to run ...");
         if (inkdrop.isEditorActive()) {
             const mde = inkdrop.getActiveEditor();
             inkdrop.commands.add(mde.wrapper.wrapper, {
@@ -8,7 +32,6 @@ module.exports = {
                     const { detail } = event;
                     const [possiblePgnFile] = detail.files;
                     const fileType = possiblePgnFile.type;
-                    console.log(`File type guess: ${fileType}`);
                     if (!/image/.test(fileType)) {
                         event.preventDefault();
                         event.stopPropagation();
@@ -36,7 +59,6 @@ module.exports = {
 
     async insertPgn(codeMirrorInstance, event) {
         const [pgnFile] = event.dataTransfer.files;
-        console.log(pgnFile);
         const fileReader = new FileReader();
 
         fileReader.addEventListener(
@@ -75,6 +97,9 @@ module.exports = {
                     "```pgn",
                     pgnContents,
                     "```",
+                    // The iframe loads successfully, but all of the
+                    // interactions with it are broken, will
+                    // need to do more research.
                     // `<iframe src="https://lichess.org/embed/game/${gameId}?theme=auto&bg=auto" width=600 height=397 frameborder=0></iframe>`,
                     `![${gameId} gif](https://lichess1.org/game/export/gif/${gameId}.gif)`,
                 ].join("\n\n")
