@@ -10,10 +10,7 @@
                     "node": 12
                 }
             }
-        ],
-
-
-
+        ]
     ],
     "plugins": [
         [
@@ -21,17 +18,10 @@
             {
                 "root": "./source",
                 "alias": {
-                    "@root": [
-                        "./"
-                    ],
-                    "@source": [
-                        "./source"
-                    ]
+                    "@root": ["./"],
+                    "@source": ["./source"]
                 },
-                "extensions": [
-                    ".js",
-                    ".ts"
-                ]
+                "extensions": [".js", ".ts"]
             }
         ],
         "@babel/plugin-proposal-class-properties",
