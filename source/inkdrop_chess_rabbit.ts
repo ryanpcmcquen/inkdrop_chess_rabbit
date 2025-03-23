@@ -17,7 +17,7 @@ export interface Inkdrop {
     store: any;
     getActiveEditor(): Editor;
     onEditorLoad(callback: (e: Editor) => void): void;
-    isEditorActive(): Boolean;
+    isEditorActive(): boolean;
 }
 
 declare const inkdrop: Inkdrop;
