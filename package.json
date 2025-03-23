@@ -1,7 +1,7 @@
 {
-    "name": "inkdrop_chess_rabbit",
+    "name": "chess_rabbit",
     "main": "./lib/inkdrop_chess_rabbit",
-    "version": "1.0.0",
+    "version": "0.0.0",
     "description": "Import PGN files and create a Lichess embed which can be used for analysis.",
     "keywords": [],
     "repository": "https://github.com/ryanpcmcquen/inkdrop_chess_rabbit",
