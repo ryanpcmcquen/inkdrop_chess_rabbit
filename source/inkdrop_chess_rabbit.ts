@@ -1,115 +1,102 @@
 // import { iframe } from "electron";
-import { markdownRenderer } from "inkdrop";
+// import { markdownRenderer } from "inkdrop";
 
-inkdrop.onEditorLoad(() => {
-    const cm = editor.cm;
-    const mde = inkdrop.getActiveEditor();
-    console.log(mde);
-});
-export default {
+// inkdrop.onEditorLoad(() => {
+//     const mde = inkdrop.getActiveEditor();
+//     inkdrop.commands.add(mde.wrapper.wrapper, {
+//         "editor:insert-images": (e) => {
+//             const { files } = e;
+//             console.log("files dropped:", e);
+
+//             e.stopPropagation();
+//         },
+//     });
+// });
+
+module.exports = {
     activate() {
-        // global.inkdrop.onEditorLoad(() => {
-        //     const mde = inkdrop.getActiveEditor();
-        //     inkdrop.commands.add(mde.wrapper.wrapper, {
-        //         "editor:insert-images": (e) => {
-        //             const { files } = e;
-        //             console.log("files dropped:", e);
-
-        //             e.stopPropagation();
-        //         },
-        //     });
-        // });
         console.log("Chess Rabbit ready to run ...");
-        const mde = inkdrop.getActiveEditor();
-        console.log(mde);
         if (inkdrop.isEditorActive()) {
             this.handleEvent.bind(this)(inkdrop.getActiveEditor());
         } else {
             global.inkdrop.onEditorLoad(this.handleEvent.bind(this));
         }
-        if (markdownRenderer) {
-            markdownRenderer.remarkCodeComponents.pgn = pgn;
-            debugger;
-        }
     },
 
     deactivate() {
         inkdrop.getActiveEditor().cm.off("drop", this.functionOnDrop);
-        if (markdownRenderer) {
-            markdownRenderer.remarkCodeComponents.pgn = null;
-        }
     },
 
     handleEvent(editor) {
-        const cm = editor.cm;
+        const codeMirrorInstance = editor.cm;
         const mde = inkdrop.getActiveEditor();
-        console.log(mde);
-        debugger;
-
         inkdrop.commands.add(mde.wrapper.wrapper, {
-            "editor:insert-images": (e) => {
-                const { files } = e;
-                console.log("files dropped:", e);
-
-                e.stopPropagation();
-
-                this.functionOnDrop = this.insertPgn.bind(this);
-
-                cm.on("drop", this.functionOnDrop);
+            "editor:insert-images": (event) => {
+                const { detail } = event;
+                const [possiblePgnFile] = detail.files;
+                if (!/image/.test(possiblePgnFile.type)) {
+                    event.stopPropagation();
+                }
+                // debugger;
             },
         });
+
+        this.functionOnDrop = this.insertPgn.bind(this);
+
+        codeMirrorInstance.on("drop", this.functionOnDrop);
     },
 
-    async insertPgn(cm, e) {
-        const pgnContents = e.dataTransfer.getData();
-        console.log(pgnContents);
-        debugger;
+    async insertPgn(codeMirrorInstance, event) {
+        const [pgnFile] = event.dataTransfer.files;
+        const fileReader = new FileReader();
 
-        if (!pgnContents) {
-            return false;
-        }
+        fileReader.addEventListener(
+            "load",
+            async () => {
+                await this.importPgn(
+                    pgnFile,
+                    fileReader.result,
+                    codeMirrorInstance
+                );
+            },
+            false
+        );
 
-        await this.importPgn(pgnContents);
-        // function (imageArrayBuffer) {
-        //    const imageBuffer = Buffer.from(imageArrayBuffer);
-        //    const imageNativeImage = nativeImage.createFromBuffer(imageBuffer);
+        fileReader.readAsText(pgnFile);
 
-        //    if (imageNativeImage.isEmpty()) {
-        //        return false;
-        //    }
-
-        const cursorPosition = cm.getCursor();
+        const cursorPosition = codeMirrorInstance.getCursor();
 
         // HACK: When the editor is opened in a separate window, delete inserted URL.
-        cm.replaceSelection("");
+        // cm.replaceSelection("");
 
-        //             inkdrop.commands.dispatch(document.body, "editor:insert-images", {
-        //                 pos: {
-        //                     line: cursorPosition.line,
-        //                     ch: cursorPosition.ch,
-        //                 },
-        //                 files: [imageNativeImage],
-        //             });
-        // }
+        // inkdrop.commands.dispatch(document.body, "editor:insert-images", {
+        //     pos: {
+        //         line: cursorPosition.line,
+        //         ch: cursorPosition.ch,
+        //     },
+        //     files: [pgnContents],
+        // });
     },
 
-    async importPgn(pgnContents) {
-        // const xhr = new XMLHttpRequest();
-        // xhr.onreadystatechange = function () {
-        //     if (xhr.readyState == 4) {
-        //         callback(this.response);
-        //     }
-        // };
-        // xhr.responseType = "arraybuffer";
-        // xhr.open("POST", "https://lichess.org/api/import", {
-        //     pgn: pgnContents,
-        // });
-        // xhr.send();
+    async importPgn(pgnFile, pgnContents, codeMirrorInstance) {
+        const lichessPastedGame = await fetch(
+            "https://lichess.org/api/import",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({ pgn: pgnContents }),
+            }
+        );
 
-        await fetch("https://lichess.org/api/import", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({ pgn: pgnContents }),
+        codeMirrorInstance.replaceSelection(lichessPastedGame.url);
+        inkdrop.commands.dispatch(document.body, "editor:insert-images", {
+            pos: {
+                line: cursorPosition.line,
+                ch: cursorPosition.ch,
+            },
+            files: [pgnFile],
         });
     },
 };
