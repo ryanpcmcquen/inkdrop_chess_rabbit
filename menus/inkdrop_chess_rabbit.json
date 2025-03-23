@@ -1,0 +1,26 @@
+{
+    "context-menu": {
+        ".CodeMirror": [
+            {
+                "label": "Toggle inkdrop_chess_rabbit",
+                "command": "inkdrop_chess_rabbit:toggle"
+            }
+        ]
+    },
+    "menu": [
+        {
+            "label": "Plugins",
+            "submenu": [
+                {
+                    "label": "inkdrop_chess_rabbit",
+                    "submenu": [
+                        {
+                            "label": "Toggle",
+                            "command": "inkdrop_chess_rabbit:toggle"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

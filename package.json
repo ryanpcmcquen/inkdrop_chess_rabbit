@@ -1,0 +1,24 @@
+{
+    "name": "inkdrop_chess_rabbit",
+    "main": "./lib/inkdrop_chess_rabbit",
+    "version": "0.0.0",
+    "description": "Import PGN files and create a Lichess embed which can be used for analysis.",
+    "keywords": [],
+    "repository": "https://github.com/ryanpcmcquen/inkdrop_chess_rabbit",
+    "license": "Zlib",
+    "engines": {
+        "inkdrop": "^5.3.1"
+    },
+    "scripts": {
+        "tc": "tsc --project tsconfig.json",
+        "build": "npm run tc && babel source/ -s --extensions .js,.jsx,.ts,.tsx -d lib/",
+        "dev": "babel source/ -s --extensions .js,.jsx,.ts,.tsx -d lib/ --watch",
+        "prettier:write": "prettier --write \"**/*\"",
+        "prettier": "prettier"
+    },
+    "devDependencies": {
+        "@babel/cli": "7.x.x",
+        "@babel/core": "7.x.x",
+        "prettier": "2.x.x"
+    }
+}
