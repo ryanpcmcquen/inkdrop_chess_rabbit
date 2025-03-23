@@ -1,0 +1,41 @@
+{
+    "presets": [
+        "@babel/preset-typescript",
+        "@babel/preset-react",
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "electron": "7.3.2",
+                    "node": 12
+                }
+            }
+        ],
+
+
+
+    ],
+    "plugins": [
+        [
+            "module-resolver",
+            {
+                "root": "./source",
+                "alias": {
+                    "@root": [
+                        "./"
+                    ],
+                    "@source": [
+                        "./source"
+                    ]
+                },
+                "extensions": [
+                    ".js",
+                    ".ts"
+                ]
+            }
+        ],
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-proposal-object-rest-spread"
+    ],
+    "sourceMaps": true
+}
