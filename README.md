@@ -1,6 +1,6 @@
 ## Chess Rabbit
 
-![Chess Rabbit logo](<./assets/Chess Rabbit vintage logo.png>)
+![Chess Rabbit logo](<assets/Chess Rabbit vintage logo.png>)
 
 Chess Rabbit allows you to drag-and-drop PGN files directly into Inkdrop, and creates a Lichess paste from them, so that you can analyze games, puzzle, or whatever it is you do with chess.
 
