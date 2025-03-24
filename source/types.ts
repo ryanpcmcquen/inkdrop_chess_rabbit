@@ -17,3 +17,8 @@ export interface Inkdrop {
     onEditorLoad(callback: (e: Editor) => void): void;
     isEditorActive(): boolean;
 }
+
+export interface LichessPasteResponse {
+    id: string;
+    url: string;
+}
