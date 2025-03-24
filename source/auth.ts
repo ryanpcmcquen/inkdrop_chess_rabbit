@@ -71,7 +71,7 @@ export class Auth {
                 // using manually using getAccessToken() and setting the
                 // "Authorization: Bearer ..." header.
                 const fetch = this.oauth.decorateFetchHTTPClient(window.fetch);
-                await this.useApi(fetch);
+                // await this.useApi(fetch);
             }
         } catch (err) {
             this.error = err;
