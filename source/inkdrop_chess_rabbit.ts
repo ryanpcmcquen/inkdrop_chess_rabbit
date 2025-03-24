@@ -1,30 +1,28 @@
 "use babel";
-
-const CodeMirror = require("codemirror");
-
-export interface Editor {
-    cm: CodeMirror.Editor;
-    forceUpdate(): any;
-    wrapper: any;
-}
-
-export interface Inkdrop {
-    window: any;
-    commands: any;
-    config: any;
-    components: any;
-    layouts: any;
-    store: any;
-    getActiveEditor(): Editor;
-    onEditorLoad(callback: (e: Editor) => void): void;
-    isEditorActive(): boolean;
-}
+import { Inkdrop } from "./types";
+// import { Auth } from "./auth";
 
 declare const inkdrop: Inkdrop;
 
 module.exports = {
+    config: {
+        ApiKey: {
+            title: "API Key",
+            type: "string",
+            description:
+                "Generate an API Key for Chess Rabbit by clicking the link in the README below (you must be signed in).",
+            default: "",
+        },
+    },
+
     activate() {
         console.log("The Chess Rabbit is ready to run ...");
+        // console.log(
+        //     `Your API Key is set to: ${inkdrop.config.get(
+        //         "chess_rabbit.ApiKey"
+        //     )}`
+        // );
+
         if (inkdrop.isEditorActive()) {
             const mde = inkdrop.getActiveEditor();
             inkdrop.commands.add(mde.wrapper.wrapper, {
@@ -77,17 +75,29 @@ module.exports = {
     },
 
     async importPgn(pgnFile, pgnContents, codeMirrorInstance) {
+        const apiKey = inkdrop.config.get("chess_rabbit.ApiKey");
+
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+        if (apiKey) {
+            myHeaders.append("Authorization", `Bearer ${apiKey}`);
+        }
+
         const lichessPastedGame = await fetch(
             "https://lichess.org/api/import",
             {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
+                headers: myHeaders,
                 body: new URLSearchParams({ pgn: pgnContents }),
             }
         );
         if (lichessPastedGame.ok) {
+            // console.log(
+            //     `Your API Key is set to: ${inkdrop.config.get(
+            //         "chess_rabbit.ApiKey"
+            //     )}`
+            // );
             const cursorPosition = codeMirrorInstance.getCursor();
             const gameId = lichessPastedGame.url.split("/").pop();
             console.log(`The Lichess game ID is: ${gameId}`);

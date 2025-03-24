@@ -1,7 +1,7 @@
 {
     "name": "chess_rabbit",
     "main": "./lib/inkdrop_chess_rabbit",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "description": "Import PGN files and create a Lichess embed which can be used for analysis.",
     "keywords": [],
     "repository": "https://github.com/ryanpcmcquen/inkdrop_chess_rabbit",
@@ -29,5 +29,8 @@
         "babel-plugin-module-resolver": "5.x.x",
         "prettier": "2.x.x",
         "typescript": "4.x.x"
+    },
+    "dependencies": {
+        "@bity/oauth2-auth-code-pkce": "^2.13.0"
     }
 }
