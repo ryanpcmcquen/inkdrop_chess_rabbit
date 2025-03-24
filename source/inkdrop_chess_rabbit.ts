@@ -1,6 +1,5 @@
 "use babel";
 import { Inkdrop, LichessPasteResponse } from "./types";
-// import { Auth } from "./auth";
 
 declare const inkdrop: Inkdrop;
 
@@ -17,11 +16,6 @@ module.exports = {
 
     activate() {
         console.log("The Chess Rabbit is ready to run ...");
-        // console.log(
-        //     `Your API Key is set to: ${inkdrop.config.get(
-        //         "chess_rabbit.ApiKey"
-        //     )}`
-        // );
 
         if (inkdrop.isEditorActive()) {
             const mde = inkdrop.getActiveEditor();
@@ -76,17 +70,12 @@ module.exports = {
 
     async importPgn(pgnFile, pgnContents, codeMirrorInstance) {
         const apiKey = inkdrop.config.get("chess_rabbit.ApiKey");
-        // const apiKey = "";
-
-        // const myHeaders = new Headers();
-        // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
         const headers: HeadersInit = {
             "Content-Type": "application/x-www-form-urlencoded",
         };
 
         if (apiKey) {
-            // myHeaders.append("Authorization", `Bearer ${apiKey}`);
             headers.Authorization = `Bearer ${apiKey}`;
         }
 
@@ -98,8 +87,6 @@ module.exports = {
                 body: new URLSearchParams({ pgn: pgnContents }),
             }
         );
-
-        console.log(lichessPasteResponse);
 
         if (lichessPasteResponse.ok) {
             let lichessPastedGame;
@@ -113,22 +100,10 @@ module.exports = {
                 lichessPastedGame = lichessPasteResponse;
                 lichessPastedGame.id = lichessPastedGame.url.split("/").pop();
             }
-            console.log("lichessPastedGame:", lichessPastedGame);
-            // console.log(`Your API Key is set to: ${apiKey}`);
+
             const gameId = lichessPastedGame.id;
             console.log(`The Lichess game ID is: ${gameId}`);
 
-            // const isGameIdValid = await fetch(
-            // `https://lichess.org/api/stream/game/${gameId}`
-            // );
-            // console.log(isGameIdValid);
-            // if (isGameIdValid.ok) {
-
-            // If the gameId is 'import', that means we did not receive the proper URL in the response.
-            // if (gameId === "import") {
-            //     console.log("Import of Lichess game failed.");
-            //     return false;
-            // }
             const cursorPosition = codeMirrorInstance.getCursor();
             codeMirrorInstance.replaceSelection(
                 [

@@ -16,12 +16,12 @@ https://github.com/k-yagi/inkdrop-dnd-paste-image
 -   [x] Link to the Lichess game page.
 -   [x] Show off the file or contents.
 -   [x] Show a Gif of the PGN.
--   [ ] Allow use of your own API key.
+-   [x] Allow use of your own API key.
 -   [ ] Fix broken iframe interactions ('Analysis Board' and 'Practice With Computer').
 
 ### Using your own API key
 
-For the fancy people. Also, THIS DOES NOT WORK YET.
+For the fancy people.
 
 Visit this link to generate an API token with the necessary permissions:
 
